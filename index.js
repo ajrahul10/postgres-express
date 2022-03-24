@@ -9,12 +9,12 @@ app.use(express.json()) // req.body
 // get all todos
 
 app.get("/todos", async (req, res) => {
-    try{
+    try {
         const allTodos = await pool.query(
             "select * from todo"
         )
         res.json(allTodos.rows)
-    } catch(err) {
+    } catch (err) {
         console.log(err.message)
     }
 })
@@ -22,13 +22,13 @@ app.get("/todos", async (req, res) => {
 // get a todo
 
 app.get("/todos/:id", async (req, res) => {
-    const {id} = req.params
-    try{
+    const { id } = req.params
+    try {
         const getTodo = await pool.query(
             "select * from todo where todo_id = $1", [id]
         )
         res.json(getTodo.rows[0])
-    } catch(err) {
+    } catch (err) {
         console.log(err.message)
     }
 })
@@ -37,13 +37,13 @@ app.get("/todos/:id", async (req, res) => {
 
 app.post("/todos", async (req, res) => {
     try {
-        const {description} = req.body
+        const { description } = req.body
         const newTodo = await pool.query(
-            "insert into todo (description) values ($1) returning *", 
+            "insert into todo (description) values ($1) returning *",
             [description]
         )
         res.json(newTodo.rows[0])
-    } catch(err) {
+    } catch (err) {
         console.error(err.message)
     }
 })
@@ -52,15 +52,15 @@ app.post("/todos", async (req, res) => {
 
 app.put("/todos/:id", async (req, res) => {
     try {
-        const {id} = req.params
-        const {description} = req.body
+        const { id } = req.params
+        const { description } = req.body
 
         const updateTodo = await pool.query(
-            "update todo set description = $1 where todo_id = $2", 
+            "update todo set description = $1 where todo_id = $2",
             [description, id]
         )
         res.json("Todo was updated!")
-    } catch(err) {
+    } catch (err) {
         console.error(err.message)
     }
 })
@@ -69,14 +69,14 @@ app.put("/todos/:id", async (req, res) => {
 
 app.delete("/todos/:id", async (req, res) => {
     try {
-        const {id} = req.params
+        const { id } = req.params
 
         const deleteTodo = await pool.query(
             "delete from todo where todo_id = $1",
             [id]
         )
         res.json("Todo was successfully deleted!")
-    } catch(err) {
+    } catch (err) {
         console.error(err.message)
     }
 });
